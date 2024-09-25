@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ping Pong Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Carrom Board Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="pong" width="800" height="400"></canvas>
+    <div class="board">
+        <div class="piece black" draggable="true"></div>
+        <div class="piece white" draggable="true"></div>
+        <div class="piece queen" draggable="true"></div>
+        <div class="piece striker" draggable="true"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
