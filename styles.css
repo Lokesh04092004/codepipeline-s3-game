@@ -3,36 +3,34 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #e0e0e0;
 }
 
-.board {
-    width: 600px;
-    height: 600px;
-    border: 10px solid #8B4513;
+.game-container {
     position: relative;
-    background-color: #e0b285;
+    width: 800px;
+    height: 400px;
+    border: 2px solid #333;
+    overflow: hidden;
 }
 
-.piece {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.paddle {
     position: absolute;
+    bottom: 20px;
+    left: 50%;
+    width: 100px;
+    height: 20px;
+    background-color: #333;
+    transform: translateX(-50%);
 }
 
-.black {
-    background-color: black;
-}
-
-.white {
-    background-color: white;
-}
-
-.queen {
+.ball {
+    position: absolute;
+    width: 20px;
+    height: 20px;
     background-color: red;
-}
-
-.striker {
-    background-color: blue;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
