@@ -1,71 +1,80 @@
-const paddle = document.getElementById('paddle');
-const ball = document.getElementById('ball');
-const container = document.querySelector('.game-container');
+const dino = document.getElementById('dino');
+const cactus = document.getElementById('cactus');
+const scoreDisplay = document.getElementById('score');
 
-let ballSpeedX = 4; // Horizontal speed
-let ballSpeedY = 4; // Vertical speed
-let ballPositionX = container.clientWidth / 2;
-let ballPositionY = container.clientHeight / 2;
+let score = 0;
+let isJumping = false;
+let gameOver = false;
 
-let paddleSpeed = 0;
-const paddleSpeedAmount = 8;
+// Jump function
+function jump() {
+    if (isJumping) return;
+    isJumping = true;
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-        paddleSpeed = -paddleSpeedAmount;
-    } else if (e.key === 'ArrowRight') {
-        paddleSpeed = paddleSpeedAmount;
-    }
-});
-
-document.addEventListener('keyup', () => {
-    paddleSpeed = 0;
-});
-
-function gameLoop() {
-    // Update paddle position
-    const paddleRect = paddle.getBoundingClientRect();
-    let paddleLeft = paddleRect.left + paddleSpeed;
-
-    // Keep paddle within bounds
-    if (paddleLeft < container.getBoundingClientRect().left) {
-        paddleLeft = container.getBoundingClientRect().left;
-    } else if (paddleLeft + paddleRect.width > container.getBoundingClientRect().right) {
-        paddleLeft = container.getBoundingClientRect().right - paddleRect.width;
-    }
-    paddle.style.left = `${paddleLeft}px`;
-
-    // Update ball position
-    ballPositionX += ballSpeedX;
-    ballPositionY += ballSpeedY;
-
-    // Ball collision with walls
-    if (ballPositionX <= 0 || ballPositionX >= container.clientWidth - 20) {
-        ballSpeedX = -ballSpeedX; // Reverse direction
-    }
-
-    if (ballPositionY <= 0) {
-        ballSpeedY = -ballSpeedY; // Reverse direction
-    }
-
-    // Ball collision with paddle
-    if (ballPositionY >= container.clientHeight - 40 && 
-        ballPositionX + 20 > paddleLeft && 
-        ballPositionX < paddleLeft + 100) {
-        ballSpeedY = -ballSpeedY; // Reverse direction
-    }
-
-    // Reset ball if it goes below the paddle
-    if (ballPositionY > container.clientHeight) {
-        ballPositionX = container.clientWidth / 2;
-        ballPositionY = container.clientHeight / 2;
-        ballSpeedY = -ballSpeedY; // Start moving up
-    }
-
-    ball.style.left = `${ballPositionX}px`;
-    ball.style.top = `${ballPositionY}px`;
-
-    requestAnimationFrame(gameLoop);
+    let jumpHeight = 0;
+    const jumpInterval = setInterval(() => {
+        if (jumpHeight >= 100) {
+            clearInterval(jumpInterval);
+            const fallInterval = setInterval(() => {
+                if (jumpHeight <= 0) {
+                    clearInterval(fallInterval);
+                    isJumping = false;
+                } else {
+                    jumpHeight -= 5;
+                    dino.style.bottom = `${20 + jumpHeight}px`;
+                }
+            }, 20);
+        } else {
+            jumpHeight += 5;
+            dino.style.bottom = `${20 + jumpHeight}px`;
+        }
+    }, 20);
 }
 
-gameLoop();
+// Detect collision
+function detectCollision() {
+    const dinoRect = dino.getBoundingClientRect();
+    const cactusRect = cactus.getBoundingClientRect();
+
+    if (
+        dinoRect.x < cactusRect.x + cactusRect.width &&
+        dinoRect.x + dinoRect.width > cactusRect.x &&
+        dinoRect.y < cactusRect.y + cactusRect.height &&
+        dinoRect.y + dinoRect.height > cactusRect.y
+    ) {
+        gameOver = true;
+        alert(`Game Over! Your score: ${score}`);
+        resetGame();
+    }
+}
+
+// Update score and check for collision
+function updateGame() {
+    if (!gameOver) {
+        score++;
+        scoreDisplay.innerText = `Score: ${score}`;
+        detectCollision();
+    }
+}
+
+// Reset game
+function resetGame() {
+    score = 0;
+    scoreDisplay.innerText = `Score: 0`;
+    gameOver = false;
+    cactus.style.animation = 'none';
+    setTimeout(() => {
+        cactus.style.animation = '';
+        cactus.style.right = '-40px';
+    }, 10);
+}
+
+// Game loop
+setInterval(updateGame, 1000);
+
+// Jump on space bar press
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        jump();
+    }
+});
