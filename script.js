@@ -3,7 +3,7 @@ const cactus = document.getElementById('cactus');
 const scoreDisplay = document.getElementById('score');
 
 let score = 0;
-let isJumping = false;
+let isJumping = true;
 let gameOver = false;
 
 // Jump function
