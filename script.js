@@ -1,38 +1,37 @@
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+const pieces = document.querySelectorAll('.piece');
+
+pieces.forEach(piece => {
+    piece.addEventListener('dragstart', dragStart);
+    piece.addEventListener('dragend', dragEnd);
+});
+
+const board = document.querySelector('.board');
+
+board.addEventListener('dragover', dragOver);
+board.addEventListener('drop', drop);
+
+function dragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.className);
+    e.target.classList.add('dragging');
 }
 
-.board {
-    width: 600px;
-    height: 600px;
-    border: 10px solid #8B4513;
-    position: relative;
-    background-color: #e0b285;
+function dragEnd(e) {
+    e.target.classList.remove('dragging');
 }
 
-.piece {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    position: absolute;
+function dragOver(e) {
+    e.preventDefault();
 }
 
-.black {
-    background-color: black;
-}
-
-.white {
-    background-color: white;
-}
-
-.queen {
-    background-color: red;
-}
-
-.striker {
-    background-color: blue;
+function drop(e) {
+    e.preventDefault();
+    const pieceClass = e.dataTransfer.getData('text/plain');
+    const piece = document.querySelector(`.${pieceClass}`);
+    
+    const rect = board.getBoundingClientRect();
+    const x = e.clientX - rect.left - (piece.offsetWidth / 2);
+    const y = e.clientY - rect.top - (piece.offsetHeight / 2);
+    
+    piece.style.left = `${x}px`;
+    piece.style.top = `${y}px`;
 }
