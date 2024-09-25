@@ -1,37 +1,70 @@
-const pieces = document.querySelectorAll('.piece');
+const paddle = document.getElementById('paddle');
+const ball = document.getElementById('ball');
+const container = document.querySelector('.game-container');
 
-pieces.forEach(piece => {
-    piece.addEventListener('dragstart', dragStart);
-    piece.addEventListener('dragend', dragEnd);
+let ballSpeedX = 4; // Horizontal speed
+let ballSpeedY = 4; // Vertical speed
+let ballPositionX = container.clientWidth / 2;
+let ballPositionY = container.clientHeight / 2;
+
+let paddleSpeed = 0;
+const paddleSpeedAmount = 8;
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+        paddleSpeed = -paddleSpeedAmount;
+    } else if (e.key === 'ArrowRight') {
+        paddleSpeed = paddleSpeedAmount;
+    }
 });
 
-const board = document.querySelector('.board');
+document.addEventListener('keyup', () => {
+    paddleSpeed = 0;
+});
 
-board.addEventListener('dragover', dragOver);
-board.addEventListener('drop', drop);
+function gameLoop() {
+    // Update paddle position
+    const paddleRect = paddle.getBoundingClientRect();
+    let paddleLeft = paddleRect.left + paddleSpeed;
 
-function dragStart(e) {
-    e.dataTransfer.setData('text/plain', e.target.className);
-    e.target.classList.add('dragging');
+    // Keep paddle within bounds
+    if (paddleLeft < container.getBoundingClientRect().left) {
+        paddleLeft = container.getBoundingClientRect().left;
+    } else if (paddleLeft + paddleRect.width > container.getBoundingClientRect().right) {
+        paddleLeft = container.getBoundingClientRect().right - paddleRect.width;
+    }
+    paddle.style.left = `${paddleLeft}px`;
+
+    // Update ball position
+    ballPositionX += ballSpeedX;
+    ballPositionY += ballSpeedY;
+
+    // Ball collision with walls
+    if (ballPositionX <= 0 || ballPositionX >= container.clientWidth - 20) {
+        ballSpeedX = -ballSpeedX; // Reverse direction
+    }
+
+    if (ballPositionY <= 0) {
+        ballSpeedY = -ballSpeedY; // Reverse direction
+    }
+
+    // Ball collision with paddle
+    if (ballPositionY >= container.clientHeight - 40 && 
+        ballPositionX + 20 > paddleLeft && 
+        ballPositionX < paddleLeft + 100) {
+        ballSpeedY = -ballSpeedY; // Reverse direction
+    }
+
+    // Reset ball if it goes below the paddle
+    if (ballPositionY > container.clientHeight) {
+        ballPositionX = container.clientWidth / 2;
+        ballPositionY = container.clientHeight / 2;
+    }
+
+    ball.style.left = `${ballPositionX}px`;
+    ball.style.top = `${ballPositionY}px`;
+
+    requestAnimationFrame(gameLoop);
 }
 
-function dragEnd(e) {
-    e.target.classList.remove('dragging');
-}
-
-function dragOver(e) {
-    e.preventDefault();
-}
-
-function drop(e) {
-    e.preventDefault();
-    const pieceClass = e.dataTransfer.getData('text/plain');
-    const piece = document.querySelector(`.${pieceClass}`);
-    
-    const rect = board.getBoundingClientRect();
-    const x = e.clientX - rect.left - (piece.offsetWidth / 2);
-    const y = e.clientY - rect.top - (piece.offsetHeight / 2);
-    
-    piece.style.left = `${x}px`;
-    piece.style.top = `${y}px`;
-}
+gameLoop();
