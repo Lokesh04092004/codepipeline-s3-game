@@ -59,6 +59,7 @@ function gameLoop() {
     if (ballPositionY > container.clientHeight) {
         ballPositionX = container.clientWidth / 2;
         ballPositionY = container.clientHeight / 2;
+        ballSpeedY = -ballSpeedY; // Start moving up
     }
 
     ball.style.left = `${ballPositionX}px`;
