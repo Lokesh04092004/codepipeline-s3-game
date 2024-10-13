@@ -1,53 +1,35 @@
 body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#todo-list {
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f7f7f7;
+    justify-content: space-between;
 }
 
-.game-container {
-    position: relative;
-    width: 600px;
-    height: 200px;
-    border: 2px solid #333;
-    overflow: hidden;
-    background-color: #fff;
+li.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
 }
 
-.dino {
-    position: absolute;
-    bottom: 20px;
-    left: 50px;
-    width: 40px;
-    height: 40px;
-    background-color: #333;
-}
-
-.cactus {
-    position: absolute;
-    bottom: 20px;
-    right: -40px; /* Start off screen */
-    width: 20px;
-    height: 40px;
-    background-color: green;
-    animation: move 2s linear infinite;
-}
-
-@keyframes move {
-    0% {
-        right: -40px;
-    }
-    100% {
-        right: 100%;
-    }
-}
-
-.score {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    font-weight: bold;
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
 }
