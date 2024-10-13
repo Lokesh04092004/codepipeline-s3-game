@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dino Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Real-Time To-Do List</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <div class="dino" id="dino"></div>
-        <div class="cactus" id="cactus"></div>
-        <div class="score" id="score">Tap Space Score: 0</div>
+    <div id="todo-list">
+        <ul id="tasks"></ul>
     </div>
+    <input type="text" id="new-task" placeholder="Enter new task">
+    <button id="add-task">Add Task</button>
     <script src="script.js"></script>
 </body>
 </html>
