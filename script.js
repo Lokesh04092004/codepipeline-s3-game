@@ -1,93 +1,56 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-// Game settings
-const mapWidth = 800;
-const mapHeight = 600;
-const playerRadius = 20;
-const playerSpeed = 3;
-const bulletSpeed = 10;
-const bulletRadius = 3;
-
-// Player object
-let player = {
-    x: mapWidth / 2,
-    y: mapHeight / 2,
-    angle: 0,
-    health: 100,
-};
-
-// Bullet objects
-let bullets = [];
-
-// Game loop
-function gameLoop() {
-    // Clear the canvas
-    ctx.clearRect(0, 0, mapWidth, mapHeight);
-
-    // Draw the player
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, playerRadius, 0, 2 * Math.PI);
-    ctx.fillStyle = 'blue';
-    ctx.fill();
-    ctx.closePath();
-
-    // Update and draw the bullets
-    for (let i = 0; i < bullets.length; i++) {
-        const bullet = bullets[i];
-        bullet.x += bullet.dx;
-        bullet.y += bullet.dy;
-
-        ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bulletRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
-
-        // Check if the bullet is out of bounds
-        if (bullet.x < 0 || bullet.x > mapWidth || bullet.y < 0 || bullet.y > mapHeight) {
-            bullets.splice(i, 1);
-            i--;
-        }
-    }
-
-    // Handle player movement
-    if (keysDown.left) {
-        player.angle -= 0.05;
-    }
-    if (keysDown.right) {
-        player.angle += 0.05;
-    }
-    if (keysDown.up) {
-        player.x += playerSpeed * Math.cos(player.angle);
-        player.y += playerSpeed * Math.sin(player.angle);
-    }
-
-    // Handle shooting
-    if (keysDown.space) {
-        const bullet = {
-            x: player.x,
-            y: player.y,
-            dx: bulletSpeed * Math.cos(player.angle),
-            dy: bulletSpeed * Math.sin(player.angle),
-        };
-        bullets.push(bullet);
-    }
-
-    // Request the next frame
-    requestAnimationFrame(gameLoop);
+.game-board {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+    position: relative;
 }
 
-// Key event handling
-let keysDown = {};
+.player-home {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    position: absolute;
+}
 
-window.addEventListener('keydown', (event) => {
-    keysDown[event.key.toLowerCase()] = true;
-});
+/* Position player homes appropriately */
 
-window.addEventListener('keyup', (event) => {
-    delete keysDown[event.key.toLowerCase()];
-});
+.center {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
-// Start the game
-gameLoop();
+.path {
+    /* Define the path using CSS or SVG */
+}
+
+.player-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pieces {
+    display: flex;
+}
+
+.dice-container {
+    text-align: center;
+}
+
+.dice {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    font-size: 24px;
+    text-align: center;
+}
